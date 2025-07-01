@@ -22,8 +22,6 @@ app.use('/bookingservice', async (req, res, next) => {
         'x-access-token': req.headers['x-access-token']
       }
     });
-
-    // Check if success = true in auth service response
     if (response.data.success) {
       console.log('Auth passed');
       return next();
@@ -33,8 +31,7 @@ app.use('/bookingservice', async (req, res, next) => {
       });
     }
   } catch (error) {
-    // Catch axios error
-    const status = error.response?.status || 500;
+     const status = error.response?.status || 500;
     const details = error.response?.data || error.message;
 
     console.error('Auth failed:', details);
@@ -45,10 +42,13 @@ app.use('/bookingservice', async (req, res, next) => {
     });
   }
 });
-
-
-
 app.use('/bookingservice',createProxyMiddleware({target:'http://localhost:3002',changeOrigin:true}))
+
+app.get('/home',(req,res)=>{
+  return res.json({
+    message:'OK'
+  })
+})
 app.listen(PORT,()=>{
     console.log(`API Gateway is running on port ${PORT}`)
 })
